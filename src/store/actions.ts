@@ -1,0 +1,1 @@
+export const AUTHENICATED = 'AUTHENICATED';
