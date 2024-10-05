@@ -1,9 +1,10 @@
-import React from 'react'
+'use client';
+import React from 'react';
+import Lazy from '@/src/components/Lazy';
 
 const Students = () => {
-    return (
-        <div>Students</div>
-    )
+    const ListStudent = Lazy('screens', 'Student/ListStudent');
+    return <ListStudent />;
 }
 
 export default Students;

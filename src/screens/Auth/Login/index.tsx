@@ -1,7 +1,8 @@
 'use client';
-import React from "react";
+import React, { useEffect } from "react";
 import { MdErrorOutline } from "react-icons/md";
 import { Button, Checkbox, Form, Input, Tag, Typography } from "antd";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import authenticated from "@/src/store/reducers/authenticated";
@@ -10,8 +11,8 @@ const { Text } = Typography;
 
 export default function Login() {
     const auth = authenticated.hook();
-    console.log(auth);
-    const onFinish = (values: any) => {
+    const router = useRouter();
+    const onFinish = (values: any) => { 
         auth.query({
             action: 'Read',
             operationName: 'Authenticated',
@@ -28,7 +29,12 @@ export default function Login() {
         console.log("Received values of form: ", values);
     };
 
-
+    useEffect(() => {
+        if (auth.data.data?.authenticated?.accessToken) {
+            localStorage.setItem('accessToken', auth.data.data?.authenticated?.accessToken);
+            router.push('/');
+        }
+    }, [auth.data]);
     return (
         <section className="flex items-center bg-white h-screen md:h-auto p-0 md:py-20">
             <div className="w-full md:w-[380px] mx-auto py-16 md:py-24 px-4">

@@ -1,1 +1,2 @@
 export const AUTHENICATED = 'AUTHENICATED';
+export const CURRENT_USER_INFO = 'CURRENT_USER_INFO';

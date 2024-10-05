@@ -16,6 +16,7 @@ export const createQueryGraphQl = (typeAction: string) => {
             }
             return result.data;
         } catch (err: any) {
+            if (err.response.data.errors) throw new Error(JSON.stringify(err.response.data.errors));
             throw new Error(JSON.stringify(err.errors));
         }
     });
@@ -59,6 +60,7 @@ const createRedux = (name: string, asyncThunk: TypeQueryGraphQL): {
                 state.data = undefined;
                 state.isLoading = false;
                 state.successful = false;
+                console.log(action);
                 const getMessageError = (JSON.parse(action.error?.message as string) as Obj[])?.map((item) => item.message as string)?.join('\n');
                 state.errors = getMessageError;
             });
