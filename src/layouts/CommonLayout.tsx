@@ -14,17 +14,22 @@ interface Props {
     children: React.ReactNode;
 }
 
+const filterIsHiddenRouter = (routers: Router[]) => {
+    return routers.filter(item => !item.isHidden).map((item) => {
+        const newItem = { ...item };
+        if (item.children) {
+            newItem.children = filterIsHiddenRouter(item.children);
+        }
+        return newItem;
+    })
+}
 const CommonLayout = (props: Props) => {
     const router = useRouter();
     const path = usePathname();
     const [tabActive, setTabActive] = useState<string[]>([]);
     const [breadcrumb, setBreadcrumb] = useState<ItemType[]>([]);
     const MOCK_ROLE = Role.ADMIN;
-    const navs: MenuProps['items'] = routers[MOCK_ROLE].filter(item => !item.isHidden).map((item) => {
-        return {
-            ...item,
-        }
-    });
+    const navs: MenuProps['items'] = filterIsHiddenRouter(routers[MOCK_ROLE]);
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();

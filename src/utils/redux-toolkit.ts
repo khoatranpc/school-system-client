@@ -60,7 +60,6 @@ const createRedux = (name: string, asyncThunk: TypeQueryGraphQL): {
                 state.data = undefined;
                 state.isLoading = false;
                 state.successful = false;
-                console.log(action);
                 const getMessageError = (JSON.parse(action.error?.message as string) as Obj[])?.map((item) => item.message as string)?.join('\n');
                 state.errors = getMessageError;
             });
