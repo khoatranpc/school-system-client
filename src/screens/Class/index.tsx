@@ -18,13 +18,17 @@ const Class = () => {
             label: 'Danh sách',
         },
     ];
+    const renderTab: Record<Tab, React.ReactNode> = {
+        SchoolYear: <SchoolYear />,
+        ListClass: <ListClass />
+    }
     return (
         <div className='classPage'>
             <Tabs items={items} onChange={(tab) => {
                 setTab(tab as Tab);
             }} />
             <div className="content">
-                {tab === 'SchoolYear' ? <SchoolYear /> : <ListClass />}
+                {renderTab[tab]}
             </div>
         </div>
     )

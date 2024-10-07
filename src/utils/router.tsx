@@ -1,5 +1,6 @@
 import { AreaChartOutlined, TeamOutlined } from "@ant-design/icons";
 import { SiGoogleclassroom } from "react-icons/si";
+import { AiOutlineBlock } from "react-icons/ai";
 import { KeyTab, Role, Router } from "../types/interface";
 
 export const getLinkByRoute: Record<Role, Record<KeyTab | any, string>> = {
@@ -8,7 +9,8 @@ export const getLinkByRoute: Record<Role, Record<KeyTab | any, string>> = {
         [KeyTab.STUDENTS_LIST]: '/admin/students',
         [KeyTab.STUDENTS_DETAIL]: '/admin/students/detail',
         [KeyTab.STUDENTS_RANK]: '/admin/students/rank',
-        [KeyTab.CLASSES]: '/admin/classes'
+        [KeyTab.CLASSES]: '/admin/classes',
+        [KeyTab.GRADES]: '/admin/grades'
     },
     STUDENT: {},
     TEACHER: {}
@@ -21,6 +23,14 @@ const routers: Record<Role, Router[]> = {
             label: 'Thống kê',
             link: getLinkByRoute['ADMIN'][KeyTab.DASHBOARD],
             icon: <AreaChartOutlined />
+        },
+        {
+            active: false,
+            key: KeyTab.GRADES,
+            label: 'Khối lớp',
+            link: getLinkByRoute['ADMIN'][KeyTab.GRADES],
+            icon: <AiOutlineBlock />,
+            isHidden: true
         },
         {
             key: KeyTab.CLASSES,

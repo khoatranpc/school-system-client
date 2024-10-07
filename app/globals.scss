@@ -7,6 +7,8 @@
   --foreground: #171717;
   --base: #4F45E5;
   --base-soft: #f3f0ff;
+  --active: #07a329;
+  --finish: #b01414;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,4 +39,14 @@ body {
 
 .highcharts-credits {
   display: none;
+}
+
+.mantine-Paper-root {
+  * {
+    font-size: 1.4rem;
+  }
+
+  td {
+    font-size: 1.4rem !important;
+  }
 }
