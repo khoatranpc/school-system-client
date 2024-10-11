@@ -1,25 +1,65 @@
-import React from 'react';
-import { Button, DatePicker, Form } from 'antd';
+import React, { useEffect } from 'react';
+import { Button, DatePicker, Form, Input } from 'antd';
 import { useFormik } from 'formik';
 import StatusSchoolYearPicker, { StatusSchoolYear } from '@/src/components/StatusSchoolYearPicker';
+import createSchoolYear from '@/src/store/reducers/createSchoolYear';
+import queryCreateSchoolYear from './config';
+import { toast } from 'react-toastify';
 
 const FormSchoolYear = () => {
-    const { values, setFieldValue, handleSubmit } = useFormik({
+    const cSchoolYear = createSchoolYear.hook();
+    const createdSchoolYear = cSchoolYear.data;
+    const { values, setFieldValue, handleSubmit, handleChange } = useFormik({
         initialValues: {
             startDate: null,
             endDate: null,
-            status: StatusSchoolYear.ACTIVE
+            status: StatusSchoolYear.ACTIVE,
+            name: ''
         },
         onSubmit(values) {
-            console.log("🚀 ~ FormSchoolYear ~ values:", values)
+            cSchoolYear.query({
+                action: 'Create',
+                operationName: 'CreateSchoolYear',
+                path: 'createSchoolYear',
+                query: queryCreateSchoolYear,
+                payload: values
+            });
         }
     });
+    useEffect(() => {
+        console.log(createdSchoolYear);
+        if (createdSchoolYear.successful && createdSchoolYear.data) {
+            toast("Tạo thông tin học kỳ thành công!", {
+                type: "success"
+            });
+            cSchoolYear.clear?.();
+        }
+        if (createdSchoolYear.errors) {
+            toast(`Tạo thông tin học kỳ thất bại! ${createdSchoolYear.errors}`, {
+                type: "error"
+            });
+            cSchoolYear.clear?.();
+        }
+    }, [cSchoolYear.data]);
     return (
         <div className='formSchoolYear'>
             <Form
                 layout='vertical'
                 onFinish={handleSubmit}
             >
+                <Form.Item
+                    name="name"
+                    label="Tên học kỳ"
+                    required
+                    rules={[{ required: true, message: "Hãy nhập tên học kỳ (number-number)!", pattern: /^\d{4,}-\d{4,}$/ }]}
+                >
+                    <Input
+                        size='small'
+                        placeholder='VD: 2018-2019'
+                        name='name'
+                        onChange={handleChange}
+                    />
+                </Form.Item>
                 <Form.Item
                     name="startDate"
                     label="Ngày bắt đầu"
@@ -55,7 +95,7 @@ const FormSchoolYear = () => {
                 <Form.Item>
                     <div className='flex justify-end gap-[1.4rem]'>
                         {/* <Button size='small' onClick={handleReset}>Đặt lại</Button> */}
-                        <Button size='small' htmlType='submit'>Lưu</Button>
+                        <Button size='small' htmlType='submit' loading={createdSchoolYear.isLoading}>Lưu</Button>
                     </div>
                 </Form.Item>
             </Form>

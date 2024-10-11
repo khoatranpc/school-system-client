@@ -34,6 +34,7 @@ const AuthProtect = (props: Props) => {
         }
         if (crrUser.data.errors) {
             localStorage.removeItem('accessToken');
+            crrUser.clear?.();
             router.push('/auth/login');
         }
     }, [crrUser.data]);

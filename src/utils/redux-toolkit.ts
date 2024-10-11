@@ -16,6 +16,7 @@ export const createQueryGraphQl = (typeAction: string) => {
             }
             return result.data;
         } catch (err: any) {
+            if (err.errors) throw new Error(JSON.stringify(err.errors));
             if (err.response.data.errors) throw new Error(JSON.stringify(err.response.data.errors));
             throw new Error(JSON.stringify(err.errors));
         }
@@ -31,7 +32,6 @@ const createRedux = (name: string, asyncThunk: TypeQueryGraphQL): {
     slice: Slice,
     hook: () => ReturnCreateHook
 } => {
-    const hookRedux: () => ReturnCreateHook = createHook(name as keyof RootState, asyncThunk);
     const slice = createSlice({
         initialState: init,
         name,
@@ -41,6 +41,7 @@ const createRedux = (name: string, asyncThunk: TypeQueryGraphQL): {
                 state.errors = undefined;
                 state.isLoading = false;
                 state.message = '';
+                state.successful = undefined;
             }
         },
         extraReducers(builder) {
@@ -65,9 +66,10 @@ const createRedux = (name: string, asyncThunk: TypeQueryGraphQL): {
             });
         },
     });
+    const hookRedux: () => ReturnCreateHook = createHook(name as keyof RootState, asyncThunk, slice.actions.clear);
     return {
         slice,
-        hook: hookRedux
+        hook: hookRedux,
     }
 }
 

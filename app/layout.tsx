@@ -1,9 +1,13 @@
 'use client';
 import React from 'react';
 import { ConfigProvider } from 'antd';
+import viVN from 'antd/lib/locale/vi_VN'; // Import locale tiếng Việt
+import { LoadingOutlined } from '@ant-design/icons';
 import { Provider } from 'react-redux';
-import Lazy from '@/src/components/Lazy';
+import { ToastContainer } from 'react-toastify';
 import { store } from '@/src/store/store';
+import 'react-toastify/dist/ReactToastify.css';
+import MainLayout from '@/src/layouts/MainLayout';
 import "./globals.scss";
 
 interface Props {
@@ -11,7 +15,6 @@ interface Props {
 }
 const RootLayout = (props: Props) => {
 
-  const MainLayout = Lazy('layouts', 'MainLayout', props);
 
   return <html>
     <head>
@@ -20,14 +23,19 @@ const RootLayout = (props: Props) => {
     <body>
       <div className='flex flex-col m-auto min-h-screen'>
         <Provider store={store}>
+          <ToastContainer />
           <ConfigProvider
+            locale={viVN}
             theme={{
               token: {
                 colorPrimary: '#4F45E5'
               }
             }}
+            spin={{
+              indicator: <LoadingOutlined spin />
+            }}
           >
-            <MainLayout />
+            <MainLayout >{props.children}</MainLayout>
           </ConfigProvider>
         </Provider>
       </div>

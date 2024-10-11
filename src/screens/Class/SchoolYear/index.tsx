@@ -63,7 +63,7 @@ const SchoolYear = () => {
                 open={open}
                 title="Thông tin học kỳ"
             >
-                <FormSchoolYear />
+                {open && <FormSchoolYear />}
             </Drawer>
             <MantineReactTable
                 table={table}

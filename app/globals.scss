@@ -50,3 +50,8 @@ body {
     font-size: 1.4rem !important;
   }
 }
+
+.ant-table-tbody>tr:hover>td {
+  background-color: var(--base-soft) !important;
+  color: var(--base) !important;
+}
