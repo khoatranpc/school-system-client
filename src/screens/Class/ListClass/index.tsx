@@ -1,25 +1,29 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { TfiReload } from 'react-icons/tfi';
 import { LuPackagePlus } from "react-icons/lu";
 import { ColumnsType } from 'antd/es/table';
 import { Button, Table } from 'antd';
-import { Obj } from '@/src/types/interface';
+import { Obj, ReduxState } from '@/src/types/interface';
 import classes from '@/src/store/reducers/classes';
-import { uuid } from '@/src/utils';
 import NotAvailable from '@/src/components/NotAvailable';
 import ModalListClass from './ModalListClass';
 import { queryClasses } from './config';
 import './styles.scss';
 
-const ListClass = () => {
+
+interface Props {
+    dataListClass: ReduxState;
+}
+
+const componentId = 'LIST_CLASS';
+const ListClass = (props: Props) => {
     const [open, setOpen] = useState(false);
     const listClass = classes.hook();
     const [pagination, setPagination] = useState({
-        limit: 10,
-        page: 1
+        limit: props.dataListClass?.data?.classes?.limit ?? 10,
+        page: props.dataListClass?.data?.classes?.page ?? 1,
     });
 
-    const componentId = useRef(uuid());
     const columns: ColumnsType = [
         {
             title: 'Khối',
@@ -94,37 +98,39 @@ const ListClass = () => {
     ];
 
     const dataListClass = useMemo(() => {
-        return listClass.data.data?.classes?.data as Obj[] ?? [];
-    }, [listClass.data]);
-    const handleQueryListClass = (limit: number, page: number) => {
-        listClass.query({
-            query: queryClasses,
-            "operationName": "Classes",
-            "path": "classes",
-            "action": "Read",
-            payload: {
-                isDeleted: false,
-                limit: limit,
-                page: page
-            },
-            componentId: componentId.current
-        });
+        return (props.dataListClass?.componentId !== componentId) ? [] : props.dataListClass?.data?.classes?.data as Obj[] ?? [];
+    }, [props.dataListClass?.data]);
+    const handleQueryListClass = (limit: number, page: number, isQuery?: boolean) => {
+        if (isQuery || !props.dataListClass?.data || (props.dataListClass?.componentId !== componentId)) {
+            listClass.query({
+                query: queryClasses,
+                "operationName": "Classes",
+                "path": "classes",
+                "action": "Read",
+                payload: {
+                    isDeleted: false,
+                    limit: limit,
+                    page: page
+                },
+                componentId: componentId
+            });
+        }
     };
 
     useEffect(() => {
         handleQueryListClass(pagination.limit, pagination.page);
-    }, [pagination]);
+    }, [props.dataListClass]);
 
     return (
         <div className="manageListClass">
             <div className="toolbar flex justify-end mb-[1.4rem] gap-[1.4rem]">
                 <Button size='small' onClick={() => setOpen(true)}><LuPackagePlus /> Tạo lớp</Button>
-                <Button size='small' onClick={() => handleQueryListClass(pagination.limit, pagination.page)}><TfiReload /> Tải lại</Button>
+                <Button size='small' onClick={() => handleQueryListClass(pagination.limit, pagination.page, true)}><TfiReload /> Tải lại</Button>
             </div>
             <ModalListClass open={open} onClose={() => setOpen(false)} />
             <Table
                 bordered
-                loading={listClass.data.isLoading}
+                loading={props.dataListClass?.isLoading}
                 size='small'
                 columns={columns}
                 dataSource={dataListClass}
@@ -136,16 +142,34 @@ const ListClass = () => {
                     },
                     pageSize: pagination.limit,
                     onChange(page, pageSize) {
+                        handleQueryListClass(pageSize, page, true);
                         setPagination({
                             limit: pageSize,
                             page: page
                         });
                     },
-                    total: listClass.data.data?.classes?.count ?? 1
+                    total: props.dataListClass?.data?.classes?.count ?? 1,
+                    current: props.dataListClass?.data?.classes?.page ?? 1
                 }}
             />
         </div>
     )
 }
 
-export default ListClass;
+
+const MemoListClass = memo((props: Props) => {
+    return <ListClass dataListClass={props.dataListClass} />
+}, (_, nextProps) => {
+    if (nextProps.dataListClass.componentId && nextProps.dataListClass.componentId === componentId) {
+        return false;
+    }
+    return true;
+});
+
+const HighOrderListClass = () => {
+    const listClass = classes.hook();
+    const dataListClass = listClass.data;
+    return <MemoListClass dataListClass={dataListClass} />;
+}
+
+export default HighOrderListClass;
