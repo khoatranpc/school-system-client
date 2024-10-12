@@ -2,9 +2,12 @@ import React, { memo, useEffect, useMemo, useState } from 'react';
 import { TfiReload } from 'react-icons/tfi';
 import { LuPackagePlus } from "react-icons/lu";
 import { ColumnsType } from 'antd/es/table';
-import { Button, Table } from 'antd';
-import { Obj, ReduxState } from '@/src/types/interface';
+import { EyeOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
+import { Button, Table, Tag } from 'antd';
+import { KeyTab, Obj, ReduxState } from '@/src/types/interface';
 import classes from '@/src/store/reducers/classes';
+import { getLinkByRoute } from '@/src/utils/router';
 import NotAvailable from '@/src/components/NotAvailable';
 import ModalListClass from './ModalListClass';
 import { queryClasses } from './config';
@@ -19,6 +22,7 @@ const componentId = 'LIST_CLASS';
 const ListClass = (props: Props) => {
     const [open, setOpen] = useState(false);
     const listClass = classes.hook();
+    const router = useRouter();
     const [pagination, setPagination] = useState({
         limit: props.dataListClass?.data?.classes?.limit ?? 10,
         page: props.dataListClass?.data?.classes?.page ?? 1,
@@ -35,7 +39,9 @@ const ListClass = (props: Props) => {
                 return {
                     className: 'bg-[var(--base-soft)!important]'
                 }
-            }
+            },
+            fixed: true,
+            width: 100,
         },
         {
             title: 'Lớp',
@@ -48,7 +54,8 @@ const ListClass = (props: Props) => {
                 return {
                     className: 'bg-[var(--base-soft)!important]'
                 }
-            }
+            },
+            width: 100,
         },
         {
             title: 'Học kỳ',
@@ -86,14 +93,38 @@ const ListClass = (props: Props) => {
         },
         {
             title: 'Trạng thái',
-            render() {
-                return <NotAvailable />
+            dataIndex: 'isActive',
+            className: 'text-center',
+            render(value) {
+                return <Tag className='m-0' color={value ? 'green-inverse' : 'red-inverse'}>{value ? 'Đang học' : 'Kết thúc'}</Tag>
             },
             onHeaderCell() {
                 return {
                     className: 'bg-[var(--base-soft)!important]'
                 }
-            }
+            },
+            width: 100
+        },
+        {
+            title: 'Hành động',
+            render(_, record) {
+                return <div>
+                    <Button icon={<EyeOutlined />} size='small'
+                        onClick={() => {
+                            router.push(`${getLinkByRoute['ADMIN'][KeyTab.DETAIL_CLASS]}?classId=${record._id ?? ''}`);
+                        }}
+                    >
+                        Chi tiết
+                    </Button>
+                </div>
+            },
+            onHeaderCell() {
+                return {
+                    className: 'bg-[var(--base-soft)!important]'
+                }
+            },
+            width: 100,
+            fixed: true
         }
     ];
 

@@ -86,7 +86,7 @@ const CommonLayout = (props: Props) => {
                             setTabActive(info.keyPath);
                             const path = findKeyPath(routers[MOCK_ROLE], info.key as KeyTab, []);
                             setBreadcrumb(path);
-                            router.push(getLinkByRoute[MOCK_ROLE][info.key]);
+                            router.replace(getLinkByRoute[MOCK_ROLE][info.key]);
                         }}
                     />
                 </Sider>

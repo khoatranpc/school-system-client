@@ -10,7 +10,8 @@ export const getLinkByRoute: Record<Role, Record<KeyTab | any, string>> = {
         [KeyTab.STUDENTS_DETAIL]: '/admin/students/detail',
         [KeyTab.STUDENTS_RANK]: '/admin/students/rank',
         [KeyTab.CLASSES]: '/admin/classes',
-        [KeyTab.GRADES]: '/admin/grades'
+        [KeyTab.CLASS_LIST]: '/admin/classes',
+        [KeyTab.DETAIL_CLASS]: '/admin/classes/detail'
     },
     STUDENT: {},
     TEACHER: {}
@@ -36,8 +37,23 @@ const routers: Record<Role, Router[]> = {
             key: KeyTab.CLASSES,
             active: true,
             label: 'Lớp học',
-            link: getLinkByRoute['ADMIN'][KeyTab.CLASSES],
-            icon: <SiGoogleclassroom />
+            link: getLinkByRoute['ADMIN'][KeyTab.CLASS_LIST],
+            icon: <SiGoogleclassroom />,
+            children: [
+                {
+                    active: true,
+                    label: 'Danh sách',
+                    key: KeyTab.CLASS_LIST,
+                    link: getLinkByRoute['ADMIN'][KeyTab.CLASS_LIST],
+                },
+                {
+                    active: true,
+                    isHidden: true,
+                    label: 'Chi tiết',
+                    key: KeyTab.DETAIL_CLASS,
+                    link: getLinkByRoute['ADMIN'][KeyTab.DETAIL_CLASS],
+                }
+            ]
         },
         {
             active: true,

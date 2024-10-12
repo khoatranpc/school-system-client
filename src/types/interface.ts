@@ -23,7 +23,9 @@ export enum KeyTab {
     STUDENTS_RANK = 'STUDENTS_RANK',
     SCHOOL_YEAR = 'SCHOOL_YEAR',
     CLASSES = 'CLASSES',
-    GRADES = 'GRADES'
+    GRADES = 'GRADES',
+    CLASS_LIST = 'CLASS_LIST',
+    DETAIL_CLASS = 'DETAIL_CLASS'
 }
 export interface ReduxState extends Obj {
     isLoading: boolean;
