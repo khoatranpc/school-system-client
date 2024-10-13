@@ -1,0 +1,12 @@
+.formTeacherPosition {
+
+    .ant-radio-button-wrapper-checked {
+        .ant-radio-button-checked {
+            background-color: var(--base);
+        }
+
+        span {
+            color: white;
+        }
+    }
+}

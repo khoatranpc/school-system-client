@@ -31,6 +31,7 @@ const RootLayout = (props: Props) => {
                 colorPrimary: '#4F45E5'
               }
             }}
+            componentSize='small'
             spin={{
               indicator: <LoadingOutlined spin />
             }}
