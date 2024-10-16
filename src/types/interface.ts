@@ -25,7 +25,11 @@ export enum KeyTab {
     CLASSES = 'CLASSES',
     GRADES = 'GRADES',
     CLASS_LIST = 'CLASS_LIST',
-    DETAIL_CLASS = 'DETAIL_CLASS'
+    DETAIL_CLASS = 'DETAIL_CLASS',
+    TEACHERS = 'TEACHERS',
+
+    DATA_BASE = 'DATA_BASE',
+    TEACHER_POSITIONS = 'TEACHER_POSITIONS'
 }
 export interface ReduxState extends Obj {
     isLoading: boolean;
@@ -34,4 +38,16 @@ export interface ReduxState extends Obj {
     errors?: any;
     successful?: boolean;
     componentId?: string;
+}
+
+export enum Degree {
+    HighSchool = "HighSchool",
+    Associate = "Associate",
+    Bachelor = "Bachelor",
+    Master = "Master",
+    Doctorate = "Doctorate",
+    PostDoctorate = "PostDoctorate",
+    Professor = "Professor",
+    Engineer = "Engineer",
+    Other = "Other"
 }

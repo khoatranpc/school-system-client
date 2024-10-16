@@ -8,6 +8,10 @@ import gradeLevels from './reducers/gradeLevels';
 import createGradeLevel from './reducers/createGradeLevel';
 import classes from './reducers/classes';
 import createListClass from './reducers/createListClass';
+import teacherPositions from './reducers/teacherPositions';
+import createTeacherPosition from './reducers/createTeacherPosition';
+import createTeacher from './reducers/createTeacher';
+import teachers from './reducers/teachers';
 
 export const store = configureStore({
     reducer: {
@@ -19,7 +23,11 @@ export const store = configureStore({
         gradeLevels: gradeLevels.slice.reducer,
         createGradeLevel: createGradeLevel.slice.reducer,
         classes: classes.slice.reducer,
-        createListClass: createListClass.slice.reducer
+        createListClass: createListClass.slice.reducer,
+        teacherPositions: teacherPositions.slice.reducer,
+        createTeacherPosition: createTeacherPosition.slice.reducer,
+        createTeacher: createTeacher.slice.reducer,
+        teachers: teachers.slice.reducer
     },
 });
 

@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
-import Lazy from '@/src/components/Lazy';
+import ListStudent from '@/src/screens/Student/ListStudent';
 
 const Students = () => {
-    const ListStudent = Lazy('screens', 'Student/ListStudent');
     return <ListStudent />;
 }
 

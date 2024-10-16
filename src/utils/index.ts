@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { v6 } from 'uuid';
 import { AppDispatch, RootState } from "../store/store";
-import { Obj, ReduxState } from "../types/interface";
+import { Degree, Obj, ReduxState } from "../types/interface";
 import React from "react";
 
 export type Action = "Read" | "Create" | "Update" | "Delete" | 'All';
@@ -40,8 +40,21 @@ const configHeaderCell = (config?: React.HTMLAttributes<any>): React.HTMLAttribu
         className: 'bg-[var(--base-soft)!important]'
     }
 }
+const DegreeTranslation: { [key in Degree]: string } = {
+    [Degree.HighSchool]: "Trung học phổ thông",
+    [Degree.Associate]: "Cao đẳng",
+    [Degree.Bachelor]: "Cử nhân",
+    [Degree.Engineer]: "Kỹ sư",
+    [Degree.Master]: "Thạc sĩ",
+    [Degree.Doctorate]: "Tiến sĩ",
+    [Degree.PostDoctorate]: "Hậu Tiến sĩ",
+    [Degree.Professor]: "Giáo sư",
+    [Degree.Other]: "Khác"
+};
+
 export {
     createHook,
     uuid,
-    configHeaderCell
+    configHeaderCell,
+    DegreeTranslation
 }

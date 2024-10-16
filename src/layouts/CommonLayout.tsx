@@ -8,6 +8,8 @@ import Image from 'next/image';
 import { KeyTab, Role, Router } from '../types/interface';
 import routers, { getLinkByRoute } from '../utils/router';
 import UserDropdown from '../components/UserDropdown';
+import TimeCounter from '../components/Timer';
+import Typewriter from 'typewriter-effect';
 const { Header, Content, Sider } = Layout;
 
 interface Props {
@@ -73,6 +75,16 @@ const CommonLayout = (props: Props) => {
             <Header style={{ display: 'flex', alignItems: 'center' }} className='bg-white gap-[1.4rem] leading-normal'>
                 <Image src={'/schoolLogo.jpg'} alt='' width={50} height={40} />
                 <h1 className='text-[var(--base)] text-[2.4rem] font-bold'>School System</h1>
+                <TimeCounter />
+                <div className='text-[var(--base)]'>
+                    <Typewriter
+                        options={{
+                            strings: ['Hệ thống tạo bởi', 'Trần Đăng Khoa', 'khoatranpc603@gmail.com'],
+                            autoStart: true,
+                            loop: true,
+                        }}
+                    />
+                </div>
                 <UserDropdown />
             </Header>
             <Layout>
