@@ -1,6 +1,5 @@
 'use client'
 import React from 'react';
-import Lazy from '@/src/components/Lazy';
 import TeacherPositions from '@/src/screens/CommonDatabase/TeacherPositions';
 
 const TeacherPositionsPage = () => {

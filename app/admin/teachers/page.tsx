@@ -1,11 +1,9 @@
-'use client';
 import React from 'react';
-import Lazy from '@/src/components/Lazy';
+import Teacher from '@/src/screens/Teacher';
 
 const TeacherPage = () => {
-    const ListTeacher = Lazy('screens', 'Teacher');
     return (
-        <ListTeacher />
+        <Teacher />
     )
 }
 
