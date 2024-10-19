@@ -33,7 +33,7 @@ const RootLayout = (props: Props) => {
             }}
             componentSize='small'
             spin={{
-              indicator: <LoadingOutlined spin />
+              indicator: <LoadingOutlined spin />,
             }}
           >
             <MainLayout >{props.children}</MainLayout>

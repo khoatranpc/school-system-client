@@ -48,17 +48,26 @@ const chartOptions: Highcharts.Options = {
     ],
 }
 
-const queryListStudent=`query Students {
-    students{
-        code
-        userId {
-            _id
-            name
-            email
-            phoneNumber
+const queryListStudent = `#graphql
+    query Students($payload: StudentsInput) {
+        students(payload: $payload){
+            data{
+                code
+                isActive
+                isDeleted
+                userId {
+                    _id
+                    name
+                    email
+                    phoneNumber
+                }
+            }
+                page
+                limit
+                totalPage
+                count
         }
-    }
-}`
+    }`;
 export {
     chartOptions,
     queryListStudent

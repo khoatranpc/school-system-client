@@ -7,11 +7,11 @@ import { Button, Image, Input, Table, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { EyeOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { configHeaderCell, DegreeTranslation } from '@/src/utils';
-import FormCreateTeacher from './FormCreateTeacher';
 import teachers from '@/src/store/reducers/teachers';
-import { Degree, Obj } from '@/src/types/interface';
+import { Degree, Obj, Role } from '@/src/types/interface';
 import NotAvailable from '@/src/components/NotAvailable';
 import { queryTeachers } from './config';
+import FormCreateInfo from '@/src/components/FormCreateInfo';
 
 const componentId = 'LIST_TEACHER';
 const Teacher = () => {
@@ -26,6 +26,9 @@ const Teacher = () => {
         {
             title: <p>Mã</p>,
             dataIndex: 'code',
+            render(value, record) {
+                return value
+            },
             onHeaderCell() {
                 return configHeaderCell();
             }
@@ -145,7 +148,7 @@ const Teacher = () => {
         }
     }, []);
     return (
-        <div>
+        <div className='h-full'>
             <div className="toolbar flex justify-end gap-[1.2rem] mb-[1.2rem]">
                 <Input placeholder='Tìm kiếm thông tin' className='w-fit' prefix={<SearchOutlined />} />
                 <Button icon={<ReloadOutlined />} onClick={() => {
@@ -159,20 +162,27 @@ const Teacher = () => {
                 title="Tạo thông tin giáo viên"
                 width={"60vw"}
             >
-                {drawer && <FormCreateTeacher />}
+                {
+                    drawer && <FormCreateInfo info={Role.TEACHER} onSubmit={(values) => {
+
+                    }}
+                    />
+                }
             </Drawer>
             <Table
                 loading={listTeacher.data.isLoading}
                 size="small"
+                className='h-full'
                 columns={columns}
                 dataSource={getListTeacher}
                 pagination={{
-                    showTotal() {
-                        return <p className='text-[var(--base)!important]'>Tổng: {listTeacher.data.data?.teachers?.count as number ?? 0}</p>
+                    showTotal(total) {
+                        return <p className='text-[var(--base)!important]'>Tổng: {total}</p>
                     },
                     showSizeChanger: true,
                     pageSize: crrPagination.limit,
                     current: crrPagination.page,
+                    total: listTeacher.data.data?.teachers?.count as number ?? 0,
                     onChange(page, pageSize) {
                         handleQueryListTeacher(page, pageSize);
                     },
