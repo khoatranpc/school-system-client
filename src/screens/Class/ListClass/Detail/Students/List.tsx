@@ -1,10 +1,23 @@
-import React from 'react';
-import { Button, Image, Input, Table, Tooltip } from 'antd';
-import { EyeOutlined, SearchOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { Button, Drawer, Image, Input, Table, Tooltip } from 'antd';
+import { EyeOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
+import { useSearchParams } from 'next/navigation';
+import { IoAddOutline } from 'react-icons/io5';
 import { configHeaderCell } from '@/src/utils';
+import studentClasses from '@/src/store/reducers/studentClasses';
+import { Obj } from '@/src/types/interface';
+import { queryStudentClasses } from './config';
+import AddStudent from './AddStudent';
 
+const componentId = 'LIST_STUDENT_IN_CLASS';
 const List = () => {
+    const searchParams = useSearchParams();
+    const classId = searchParams.get('classId');
+    const listStudentInClass = studentClasses.hook();
+    const getListStudent = listStudentInClass.data.data?.studentClasses?.data as Obj[] ?? [];
+    console.log("🚀 ~ List ~ getListStudent:", getListStudent)
+    const [drawer, setDrawer] = useState(false);
     const columns: ColumnsType = [
         {
             title: 'STT',
@@ -18,14 +31,13 @@ const List = () => {
         },
         {
             title: 'Mã HS',
-            render() {
-                return <div>
-                    56839232
-                </div>
+            render(_, record) {
+                return record.studentId?.code ?? ''
             },
             onHeaderCell() {
                 return configHeaderCell();
             },
+            width: 150
         },
         {
             title: 'Học sinh',
@@ -39,9 +51,9 @@ const List = () => {
                         />
                     </div>
                     <div>
-                        <p className='font-semibold '>Nguyễn Văn Cường</p>
-                        <p className='text-[1.2rem] italic'>cuongnv@gmail.com</p>
-                        <p className='text-[1.2rem] italic'>0123456789</p>
+                        <p className='font-semibold '>{record.studentId?.userId?.name}</p>
+                        <p className='text-[1.2rem] italic'>{record.studentId?.userId?.email}</p>
+                        <p className='text-[1.2rem] italic'>{record.studentId?.userId?.phoneNumber}</p>
                     </div>
                 </div>
             },
@@ -53,9 +65,7 @@ const List = () => {
             title: 'Liên hệ',
             render(_, record) {
                 return <div>
-                    <p>Đ/C: Yên Thịnh, Yên Mô, Ninh Bình</p>
-                    <p>Bố: 123456789</p>
-                    <p>Mẹ: 123456789</p>
+                    <p>{record.studentId?.userId?.address}</p>
                 </div>
             },
             onHeaderCell() {
@@ -67,8 +77,8 @@ const List = () => {
             render(_, record) {
                 return <div className='flex gap-[1.2rem]'>
                     <div>
-                        <p>Điểm TB: 7.6</p>
-                        <p>Hạnh kiểm: Tốt</p>
+                        <p>Điểm TB:</p>
+                        <p>Hạnh kiểm:</p>
                     </div>
                     <Tooltip title="Xem bảng điểm"><Button size="small" icon={<EyeOutlined />}></Button></Tooltip>
                 </div>
@@ -84,9 +94,10 @@ const List = () => {
             },
             render(_, record) {
                 return <div>
-                    <span>Đã chuyển lớp</span>
+                    <span>{record.type}</span>
                 </div>
-            }
+            },
+            width: 120
         },
         {
             title: 'Hành động',
@@ -100,18 +111,49 @@ const List = () => {
             }
         }
     ];
+    const queryListStudentInClass = (page: number = 1, limit: number = 50) => {
+        listStudentInClass.query({
+            query: queryStudentClasses,
+            action: 'Read',
+            operationName: 'StudentClasses',
+            path: 'studentClasses',
+            componentId: componentId,
+            payload: {
+                filter: {},
+                pagination: {
+                    page,
+                    limit
+                }
+            }
+        });
+    }
+    useEffect(() => {
+        if (!listStudentInClass.data.data || (listStudentInClass.data.componentId !== componentId)) {
+            queryListStudentInClass();
+        }
+    }, []);
     return (
         <div className='listStudentInClass mt-[1.8rem] flex flex-col gap-[1rem]'>
             <div className="toolbar flex justify-end gap-[1.8rem]">
                 <Input className='w-fit' size="small" prefix={<SearchOutlined />} placeholder='Nhập thông tin tìm kiếm' />
-                <Button size='small'>Thêm học sinh</Button>
+                <Button size='small' icon={<ReloadOutlined />} onClick={() => queryListStudentInClass()}>Tải lại</Button>
+                <Button size='small' onClick={() => setDrawer(true)} icon={<IoAddOutline />}>Thêm học sinh</Button>
             </div>
+            <Drawer
+                open={drawer}
+                onClose={() => setDrawer(false)}
+                title="Thêm học sinh"
+                width='80vw'
+            >
+                {drawer && <AddStudent classId={classId as string} />}
+            </Drawer>
             <Table
+                loading={listStudentInClass.data.isLoading}
                 size='small'
                 columns={columns}
-                dataSource={[{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]}
+                dataSource={getListStudent}
                 pagination={false}
-                scroll={{ x: 'max-content', y: '55vh' }}
+                scroll={{ x: getListStudent.length ? 'max-content' : '', y: getListStudent.length ? '55vh' : '' }}
             />
         </div>
     )

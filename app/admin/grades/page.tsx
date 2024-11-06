@@ -1,10 +1,9 @@
 'use client';
 import React from 'react';
-import Lazy from '@/src/components/Lazy';
+import Grades from '@/src/screens/Grades';
 
 const GradesPage = () => {
-    const Grades = Lazy('screens', 'Grades')
-    return <Grades />
+    return <Grades />;
 }
 
 export default GradesPage;

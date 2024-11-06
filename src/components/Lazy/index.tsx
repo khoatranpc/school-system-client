@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import dynamic, { DynamicOptions } from 'next/dynamic';
 import { Obj } from '@/src/types/interface';
@@ -15,7 +14,7 @@ const Lazy = (root: 'components' | 'layouts' | 'screens', path: string, props?: 
             case 'screens':
                 return import(`@/src/screens/${path}`);
             default:
-                return import(`@/src/${path}`)
+                return import(`@/src/${path}`);
         }
     }, {
         ssr: false,

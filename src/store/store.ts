@@ -13,6 +13,9 @@ import createTeacherPosition from './reducers/createTeacherPosition';
 import createTeacher from './reducers/createTeacher';
 import teachers from './reducers/teachers';
 import createStudent from './reducers/createStudent';
+import studentClasses from './reducers/studentClasses';
+import detailClass from './reducers/detailClass';
+import addStudentsIntoClass from './reducers/addStudentIntoClass';
 
 export const store = configureStore({
     reducer: {
@@ -29,7 +32,10 @@ export const store = configureStore({
         createTeacherPosition: createTeacherPosition.slice.reducer,
         createTeacher: createTeacher.slice.reducer,
         teachers: teachers.slice.reducer,
-        createStudent: createStudent.slice.reducer
+        createStudent: createStudent.slice.reducer,
+        studentClasses: studentClasses.slice.reducer,
+        detailClass: detailClass.slice.reducer,
+        addStudentsIntoClass: addStudentsIntoClass.slice.reducer
     },
 });
 

@@ -1,33 +1,62 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Col, Row } from 'antd';
 import NotFoundClass from './NotFound';
 import HomeroomTeacher from './HomeroomTeacher';
 import Students from './Students';
+import Loading from '@/src/components/Loading';
+import detailClass from '@/src/store/reducers/detailClass';
+import { queryDetailClass } from './config';
+import { Obj } from '@/src/types/interface';
 
 const DetailClass = () => {
     const searchParams = useSearchParams();
+    const [loadCurrentClass, setLoadCurrentClass] = useState(true);
     const classId = searchParams.get('classId');
-    if (!classId) {
-        return <NotFoundClass />
+    const detail = detailClass.hook();
+    const getDetailClass = detail.data.data?.detailClass as Obj ?? {};
+
+    const handleQuery = () => {
+        detail.query({
+            query: queryDetailClass,
+            action: 'Read',
+            operationName: 'DetailClass',
+            path: 'detailClass',
+            payload: {
+                classId
+            }
+        });
     }
+    useEffect(() => {
+        if (classId && (!detail.data.data?.detailClass || detail.data.data?.detailClass?._id !== classId)) {
+            handleQuery();
+        }
+    }, []);
+    useEffect(() => {
+        if (detail.data.successful || detail.data.errors) {
+            setLoadCurrentClass(false);
+        }
+    }, [detail.data]);
     return (
-        <div className='detailClass'>
-            <Row gutter={[48, 16]}>
-                <Col
-                    span={8}
-                    className='border-r-[1px] border-r-[var(--base)]'
-                >
-                    <HomeroomTeacher />
-                </Col>
-                <Col
-                    span={16}
-                >
-                    <p className='text-[2.4rem] font-semibold mb-[1.8rem]'>Lớp: 10A</p>
-                    <Students />
-                </Col>
-            </Row>
-        </div>
+        loadCurrentClass || detail.data.isLoading ? <Loading /> :
+            (!classId || detail.data.errors ? <NotFoundClass handleReload={handleQuery} /> :
+                <div className='detailClass'>
+                    <Row gutter={[48, 16]}>
+                        <Col
+                            span={8}
+                            className='border-r-[1px] border-r-[var(--base)]'
+                        >
+                            <HomeroomTeacher />
+                        </Col>
+                        <Col
+                            span={16}
+                        >
+                            <p className='text-[2.4rem] font-semibold mb-[1.8rem]'>Lớp: {getDetailClass?.name}<br />Năm học: {getDetailClass?.schoolYearId?.name}</p>
+                            <Students />
+                        </Col>
+                    </Row>
+                </div>
+            )
     )
 }
 

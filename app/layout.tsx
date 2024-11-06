@@ -15,7 +15,6 @@ interface Props {
 }
 const RootLayout = (props: Props) => {
 
-
   return <html>
     <head>
       <title>School system</title>
@@ -36,7 +35,9 @@ const RootLayout = (props: Props) => {
               indicator: <LoadingOutlined spin />,
             }}
           >
-            <MainLayout >{props.children}</MainLayout>
+            <MainLayout>
+              {props.children}
+            </MainLayout>
           </ConfigProvider>
         </Provider>
       </div>

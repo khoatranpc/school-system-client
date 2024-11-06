@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
-import Lazy from '@/src/components/Lazy';
+import Class from '@/src/screens/Class';
 
 const ClassesPage = () => {
-    const Class = Lazy('screens', 'Class');
     return <Class />
 }
 
