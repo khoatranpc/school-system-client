@@ -1,34 +1,23 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { Form, Input, Modal, Select, Tooltip } from 'antd';
-import { useFormik } from 'formik';
-import { ExclamationCircleOutlined, SearchOutlined } from '@ant-design/icons';
-import { useDebounce } from '@/src/utils/customHooks';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import { DeleteFilled } from '@ant-design/icons';
+import { Button, Modal, Popconfirm, Radio, Tooltip } from 'antd';
+import { Obj } from '@/src/types/interface';
 
 const ModalHomeRoomTeacher = forwardRef((props, ref) => {
     const [modal, setModal] = useState(false);
-    const handleModal = (open: boolean) => {
+    const [crrHomeroomTeacher, setCrrHomeRoomeTeacher] = useState<Obj | undefined>({});
+    const handleModal = (open: boolean, currentHomeRoomTeacher?: Obj) => {
+        setCrrHomeRoomeTeacher(currentHomeRoomTeacher);
         setModal(open);
     };
-    const [searchValue, setSearchValue] = useState("");
-    const debouncedValue = useDebounce(searchValue, 3000);
-    const { values, handleChange, handleSubmit } = useFormik({
-        initialValues: {
-            teacherId: '',
-            schoolYear: '',
-            status: true,
-        },
-        onSubmit(values) {
-            console.log(values);
-        }
-    });
     useImperativeHandle(ref, () => {
         return {
             handleModal
         }
     });
-    useEffect(() => {
-        console.log(debouncedValue);
-    }, [debouncedValue]);
+    const handleDelete = () => {
+        
+    }
     return (
         <Modal
             open={modal}
@@ -38,38 +27,32 @@ const ModalHomeRoomTeacher = forwardRef((props, ref) => {
             onCancel={() => {
                 handleModal(false);
             }}
-            title={"Cập nhật Giáo viên chủ nhiệm"}
+            centered
+            title={"Cập nhật Thông tin"}
         >
-            <div className='formAddHoomroomTeacher'>
-                <Form
-                    layout='vertical'
-                    onFinish={handleSubmit}
-                >
-                    <Form.Item
-                        label={
-                            <p className='flex items-center'>
-                                Tìm kiếm giáo viên <sup>Chưa làm chủ nhiệm trong học kỳ hiện tại!</sup>
-                            </p>
-                        }
-                        required
-                        initialValue={searchValue}
-                    >
-                        <Select
-                            suffixIcon={<SearchOutlined />}
-                            showSearch
-                            filterOption={false}
-                            // notFoundContent={fetching ? <Spin size="small" /> : null}
-                            onSearch={(value) => {
-                                setSearchValue(value);
-                            }}
-                            onChange={(value) => {
-                                console.log(value);
-                            }}
-                            value={searchValue}
-                        />
-                    </Form.Item>
-                </Form>
-            </div>
+            {
+                modal &&
+                <div className='crrHomeroomTeacher flex flex-col gap-[1.2rem] justify-between items-centers'>
+                    <p className='flex items-center justify-between'>
+                        <span>Giáo viên: <strong>{crrHomeroomTeacher?.teacherId?.userId?.name as string}</strong></span>
+                        <Popconfirm
+                            title="Xoá thông tin dữ liệu"
+                            description="Xoá thông tin dữ liệu phân bổ GVCN?"
+                        >
+                            <Tooltip color='var(--base)' title="Xoá thông tin dữ liệu?">
+                                <Button icon={<DeleteFilled className='text-red-600' />} />
+                            </Tooltip>
+                        </Popconfirm>
+                    </p>
+                    <div className='flex gap-[1.2rem]'>
+                        <p>Trạng thái: </p>
+                        <Radio.Group optionType='button' defaultValue={crrHomeroomTeacher?.isActive as boolean}>
+                            <Radio value={true}>Đang làm việc</Radio>
+                            <Radio value={false}>Ngưng làm việc</Radio>
+                        </Radio.Group>
+                    </div>
+                </div>
+            }
         </Modal>
 
     )

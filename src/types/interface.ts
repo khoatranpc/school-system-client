@@ -51,3 +51,9 @@ export enum Degree {
     Engineer = "Engineer",
     Other = "Other"
 }
+
+export enum Gender {
+    Male = 'Male',
+    Female = 'Female',
+    Other = 'Other'
+}
