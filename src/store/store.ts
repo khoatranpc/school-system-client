@@ -16,6 +16,7 @@ import createStudent from './reducers/createStudent';
 import studentClasses from './reducers/studentClasses';
 import detailClass from './reducers/detailClass';
 import addStudentsIntoClass from './reducers/addStudentIntoClass';
+import saveHomeRoomTeacher from './reducers/savehomeroomteacher';
 
 export const store = configureStore({
     reducer: {
@@ -35,7 +36,8 @@ export const store = configureStore({
         createStudent: createStudent.slice.reducer,
         studentClasses: studentClasses.slice.reducer,
         detailClass: detailClass.slice.reducer,
-        addStudentsIntoClass: addStudentsIntoClass.slice.reducer
+        addStudentsIntoClass: addStudentsIntoClass.slice.reducer,
+        saveHomeRoomTeacher: saveHomeRoomTeacher.slice.reducer
     },
 });
 

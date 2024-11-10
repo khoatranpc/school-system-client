@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { Image, Tag, Divider, Table, Button } from 'antd';
 import { IoSchoolOutline } from "react-icons/io5";
 import { PiChalkboardThin } from "react-icons/pi";
+import { PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Obj } from '@/src/types/interface';
+import ModalHomeRoomTeacher from './ModalHomeRoomTeacher';
+import DrawerPickTeacher from './DrawerPickTeacher';
 
 
 interface Props {
@@ -10,33 +14,35 @@ interface Props {
 }
 
 const HomeroomTeacher = (props: Props) => {
-  const dataSource = [
-    {
-      name: 'Trần Đăng Khoa',
-      schoolYear: '2024-2025',
-      isActive: true
-    },
-    {
-      name: 'Trần Đăng Khoa',
-      schoolYear: '2024-2025',
-      isActive: true
-    },
-    {
-      name: 'Trần Đăng Khoa',
-      schoolYear: '2024-2025',
-      isActive: true
-    },
-    {
-      name: 'Trần Đăng Khoa',
-      schoolYear: '2024-2025',
-      isActive: true
-    },
-    {
-      name: 'Trần Đăng Khoa',
-      schoolYear: '2024-2025',
-      isActive: true
-    },
-  ]
+  const modalHomeRoomTeacherRef = useRef(null);
+  const pickTeacher = useRef(null);
+  const dataSource: Obj[] = [
+    // {
+    //   name: 'Trần Đăng Khoa',
+    //   schoolYear: '2024-2025',
+    //   isActive: true
+    // },
+    // {
+    //   name: 'Trần Đăng Khoa',
+    //   schoolYear: '2024-2025',
+    //   isActive: true
+    // },
+    // {
+    //   name: 'Trần Đăng Khoa',
+    //   schoolYear: '2024-2025',
+    //   isActive: true
+    // },
+    // {
+    //   name: 'Trần Đăng Khoa',
+    //   schoolYear: '2024-2025',
+    //   isActive: true
+    // },
+    // {
+    //   name: 'Trần Đăng Khoa',
+    //   schoolYear: '2024-2025',
+    //   isActive: true
+    // },
+  ];
   const columns: ColumnsType = [
     {
       title: 'STT',
@@ -96,7 +102,7 @@ const HomeroomTeacher = (props: Props) => {
         return <Button size="small">Cập nhật</Button>
       }
     }
-  ]
+  ];
   return (
     <div className='homeroomTeacher'>
       <div className="currentHomeroomTeacher flex gap-[1.8rem]">
@@ -115,6 +121,26 @@ const HomeroomTeacher = (props: Props) => {
         </div>
       </div>
       <div className="list mt-[1.8rem]">
+        <div className='flex justify-end gap-[1.2rem] mb-[1.2rem]'>
+          <Button icon={<ReloadOutlined />}>
+            Tải lại
+          </Button>
+          <Button
+            icon={<PlusCircleOutlined />}
+            onClick={() => {
+              // (modalHomeRoomTeacherRef.current as unknown as Obj)?.handleModal?.(true);
+              (pickTeacher.current as unknown as Obj)?.handleDrawer?.(true);
+            }}
+          >
+            Thêm
+          </Button>
+        </div>
+        <ModalHomeRoomTeacher
+          ref={modalHomeRoomTeacherRef}
+        />
+        <DrawerPickTeacher
+          ref={pickTeacher}
+        />
         <Table
           style={{
             width: '100%',

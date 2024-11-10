@@ -28,7 +28,7 @@ const DetailClass = () => {
         });
     }
     useEffect(() => {
-        if (classId && (!detail.data.data?.detailClass || detail.data.data?.detailClass?._id !== classId)) {
+        if (classId && (!detail.data.data?.detailClass || (detail.data.data?.detailClass?._id !== classId))) {
             handleQuery();
         }
     }, []);

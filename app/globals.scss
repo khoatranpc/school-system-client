@@ -52,6 +52,20 @@ body {
   }
 }
 
+* {
+  &::-webkit-scrollbar {
+    height: 0.2rem;
+    width: 0.5rem;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--base);
+    height: 1.2rem;
+    border-radius: 1rem;
+  }
+}
+
 .ant-table-tbody>tr:hover>td {
   background-color: var(--base-soft) !important;
   color: var(--base) !important;

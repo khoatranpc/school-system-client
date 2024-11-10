@@ -19,7 +19,7 @@ const RootLayout = (props: Props) => {
     <head>
       <title>School system</title>
     </head>
-    <body>
+    <body cz-shortcut-listen="true">
       <div className='flex flex-col m-auto min-h-screen'>
         <Provider store={store}>
           <ToastContainer />

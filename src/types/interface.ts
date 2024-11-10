@@ -7,7 +7,7 @@ export enum Role {
     TEACHER = 'TEACHER'
 }
 export interface Router {
-    active: boolean;
+    ú: boolean;
     key: KeyTab;
     link: string;
     isHidden?: boolean;

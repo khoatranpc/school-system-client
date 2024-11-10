@@ -15,11 +15,16 @@ const List = () => {
     const searchParams = useSearchParams();
     const classId = searchParams.get('classId');
     const listStudentInClass = studentClasses.hook();
-    const getListStudent = listStudentInClass.data.data?.studentClasses?.data as Obj[] ?? [];
-    console.log("🚀 ~ List ~ getListStudent:", getListStudent)
+    const getListStudent = (listStudentInClass.data.data?.studentClasses?.data as Obj[] ?? []).map((item) => {
+        return {
+            key: item._id as string,
+            ...item
+        }
+    });
     const [drawer, setDrawer] = useState(false);
     const columns: ColumnsType = [
         {
+            key: 'stt',
             title: 'STT',
             render(_, __, index) {
                 return index + 1
@@ -30,6 +35,7 @@ const List = () => {
             width: 50
         },
         {
+            key: 'code',
             title: 'Mã HS',
             render(_, record) {
                 return record.studentId?.code ?? ''
@@ -40,6 +46,7 @@ const List = () => {
             width: 150
         },
         {
+            key: 'hs',
             title: 'Học sinh',
             render(_, record) {
                 return <div className='flex gap-[1.2rem]'>
@@ -62,6 +69,7 @@ const List = () => {
             }
         },
         {
+            key: 'ct',
             title: 'Liên hệ',
             render(_, record) {
                 return <div>
@@ -73,6 +81,7 @@ const List = () => {
             }
         },
         {
+            key: 'ln',
             title: 'Học tập',
             render(_, record) {
                 return <div className='flex gap-[1.2rem]'>
@@ -88,6 +97,7 @@ const List = () => {
             }
         },
         {
+            key: 'status',
             title: 'Trạng thái',
             onHeaderCell() {
                 return configHeaderCell();
@@ -100,6 +110,7 @@ const List = () => {
             width: 120
         },
         {
+            key: 'action',
             title: 'Hành động',
             onHeaderCell() {
                 return configHeaderCell();
@@ -119,7 +130,9 @@ const List = () => {
             path: 'studentClasses',
             componentId: componentId,
             payload: {
-                filter: {},
+                filter: {
+                    classId
+                },
                 pagination: {
                     page,
                     limit
@@ -128,9 +141,7 @@ const List = () => {
         });
     }
     useEffect(() => {
-        if (!listStudentInClass.data.data || (listStudentInClass.data.componentId !== componentId)) {
-            queryListStudentInClass();
-        }
+        queryListStudentInClass();
     }, []);
     return (
         <div className='listStudentInClass mt-[1.8rem] flex flex-col gap-[1rem]'>
