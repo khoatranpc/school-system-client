@@ -57,7 +57,7 @@ const createRedux = (name: string, asyncThunk: TypeQueryGraphQL): {
                 state.data = (action.payload as Obj)?.data;
                 state.errors = undefined;
                 state.successful = true;
-                (getVariables?.callback as ResponseCallback)?.(true, '');
+                (getVariables?.callback as ResponseCallback)?.(true, '', state.data);
 
             });
             builder.addCase(asyncThunk.rejected, (state, action) => {

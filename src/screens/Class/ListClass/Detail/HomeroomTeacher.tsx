@@ -17,7 +17,7 @@ import { DegreeTranslation } from '@/src/utils';
 interface Props {
   classId?: string;
 }
-
+const componentId = 'HomeRoomTeacherInDetailClass';
 const HomeroomTeacher = (props: Props) => {
   const modalHomeRoomTeacherRef = useRef(null);
   const pickTeacher = useRef(null);
@@ -27,7 +27,13 @@ const HomeroomTeacher = (props: Props) => {
   const getDetailClass = detail.data.data?.detailClass as Obj ?? {};
   const resource = listHomeroomTeacher.data.data?.homeroomTeachers?.data as Obj[] ?? [];
   const dataSource: Obj[] = useMemo(() => {
-    return (listHomeroomTeacher.data.data?.homeroomTeachers?.data as Obj[] ?? []).filter((record) => record.isDeleted === viewDataDeleted)
+    const getListData: Obj[] = (listHomeroomTeacher.data.data ? (listHomeroomTeacher.data.componentId === componentId ? listHomeroomTeacher.data.data?.homeroomTeachers?.data as Obj[] : []) : []);
+    return getListData.filter((record) => record.isDeleted === viewDataDeleted).map((record) => {
+      return {
+        key: record._id,
+        ...record
+      }
+    })
   }, [listHomeroomTeacher.data.data, viewDataDeleted]);
   const currentHomeRoomTeacher = resource.find((data: Obj) => data.isActive && !data.isDeleted) as Obj;
   const teachersDegrees = currentHomeRoomTeacher?.teacherId?.degrees as Obj[] ?? [];
@@ -124,7 +130,8 @@ const HomeroomTeacher = (props: Props) => {
           "schoolYearId": getDetailClass?.schoolYearId?._id
         }
       },
-      query: queryHomeRoomTeachers
+      query: queryHomeRoomTeachers,
+      componentId: componentId
     });
   }, []);
   useEffect(() => {
