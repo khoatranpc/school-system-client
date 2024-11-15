@@ -52,13 +52,13 @@ const DetailClass = () => {
                             span={16}
                         >
                             <p className='text-[2.4rem] font-semibold mb-[1.8rem] text-center'>
-                                <p className='flex gap-[1.2rem] justify-center text-[var(--base)]'>
+                                <span className='flex gap-[1.2rem] justify-center text-[var(--base)]'>
                                     <span>---<span>꧁</span></span>
                                     {getDetailClass?.name}
                                     <span>
                                         <span className='inline-block scale-x-[-1]'>
                                             ꧁</span>---</span>
-                                </p>
+                                </span>
                                 <span>{getDetailClass?.schoolYearId?.name}</span>
                             </p>
                             <Students />

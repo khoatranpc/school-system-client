@@ -36,6 +36,9 @@ const queryHomeRoomTeachers = `#graphql
                     _id
                     name
                 }
+                classId {
+                    _id
+                }
                 isActive
                 isDeleted
                 createdAt
@@ -47,7 +50,17 @@ const queryHomeRoomTeachers = `#graphql
         }
     }
 `;
+
+const queryCountStudentInClass = `#graphql
+    query CountStudentInClass($payload: CountStudentInClassInput!) {
+            countStudentInClass(payload: $payload) {
+            count
+            classId
+            }
+    }
+`;
 export {
     querySaveHomeroomTeacher,
-    queryHomeRoomTeachers
+    queryHomeRoomTeachers,
+    queryCountStudentInClass
 }

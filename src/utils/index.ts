@@ -7,7 +7,7 @@ import { Degree, Obj, ReduxState, TypeStudentInClass } from "../types/interface"
 export type Action = "Read" | "Create" | "Update" | "Delete" | 'All';
 type QueryHook = { query: string, operationName: string, path: string, action: Action, payload?: Obj, componentId?: string };
 
-export type ResponseCallback = (successful: boolean, messageFromResponse: string) => void;
+export type ResponseCallback = (successful: boolean, messageFromResponse: string, dataState?: any) => void;
 export type FunctionQueryHook = ({ query, operationName, path, action, payload, componentId }: QueryHook, callback?: ResponseCallback) => void;
 
 const createHook = (state: keyof RootState, queryGraphQl: Function, clearReducer?: Function) => {
