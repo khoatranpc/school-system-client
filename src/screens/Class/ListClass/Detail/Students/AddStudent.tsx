@@ -2,14 +2,15 @@ import listStudent from '@/src/store/reducers/listStudent';
 import { Button, Transfer } from 'antd';
 import { TransferItem } from 'antd/es/transfer';
 import { SaveOutlined } from '@ant-design/icons';
+import { toast } from 'react-toastify';
 import React, { useEffect, useMemo, useState } from 'react';
 import { mutationAddStudentsIntoClass, queryStudentsRNotInClass } from './config';
 import { Obj } from '@/src/types/interface';
 import Loading from '@/src/components/Loading';
 import detailClass from '@/src/store/reducers/detailClass';
 import NotAvailable from '@/src/components/NotAvailable';
-import './styles.scss';
 import addStudentsIntoClass from '@/src/store/reducers/addStudentIntoClass';
+import './styles.scss';
 
 interface Props {
     classId?: string;
@@ -45,7 +46,20 @@ const AddStudent = (props: Props) => {
             action: 'Create',
             operationName: 'AddStudentsIntoClass',
             path: 'addStudentsIntoClass',
-            payload: targetKeys
+            payload: {
+                studentIds: targetKeys,
+                classId: getDetailClass?._id as string
+            }
+        }, (successful, message) => {
+            if (successful) {
+                toast('Thêm thông tin học sinh thành công!', {
+                    type: 'success'
+                });
+            } else {
+                toast(`Thất bại! ${message}`, {
+                    type: 'error'
+                });
+            }
         });
     }
     useEffect(() => {

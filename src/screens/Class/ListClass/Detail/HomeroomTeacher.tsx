@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
-import { Image, Tag, Divider, Table, Button } from 'antd';
+import { Image, Tag, Divider, Table, Button, Switch, Tooltip } from 'antd';
 import { IoSchoolOutline } from "react-icons/io5";
 import { PiChalkboardThin } from "react-icons/pi";
 import { LoadingOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -22,86 +22,98 @@ const HomeroomTeacher = (props: Props) => {
   const modalHomeRoomTeacherRef = useRef(null);
   const pickTeacher = useRef(null);
   const listHomeroomTeacher = homeroomTeachers.hook();
+  const [viewDataDeleted, setViewDataDeleted] = useState(false);
   const detail = detailClass.hook();
   const getDetailClass = detail.data.data?.detailClass as Obj ?? {};
-  const dataSource: Obj[] = listHomeroomTeacher.data.data?.homeroomTeachers?.data as Obj[] ?? [];
-  const currentHomeRoomTeacher = dataSource.find((data: Obj) => data.isActive && !data.isDeleted) as Obj;
+  const resource = listHomeroomTeacher.data.data?.homeroomTeachers?.data as Obj[] ?? [];
+  const dataSource: Obj[] = useMemo(() => {
+    return (listHomeroomTeacher.data.data?.homeroomTeachers?.data as Obj[] ?? []).filter((record) => record.isDeleted === viewDataDeleted)
+  }, [listHomeroomTeacher.data.data, viewDataDeleted]);
+  const currentHomeRoomTeacher = resource.find((data: Obj) => data.isActive && !data.isDeleted) as Obj;
   const teachersDegrees = currentHomeRoomTeacher?.teacherId?.degrees as Obj[] ?? [];
   const getLatestDegree = teachersDegrees[teachersDegrees.length - 1];
-  const columns: ColumnsType = [
-    {
-      title: 'STT',
-      render(_, __, index) {
-        return index + 1;
+  const columns: ColumnsType = useMemo(() => {
+    return [
+      {
+        key: 'STT',
+        title: 'STT',
+        render(_, __, index) {
+          return index + 1;
+        },
+        onHeaderCell() {
+          return {
+            className: 'bg-[var(--base-soft)!important]'
+          }
+        },
+        width: 80,
+        fixed: true
       },
-      onHeaderCell() {
-        return {
-          className: 'bg-[var(--base-soft)!important]'
+      {
+        key: 'Teacher',
+        title: 'Giáo viên',
+        dataIndex: 'name',
+        render(_, record) {
+          return <strong>{record?.teacherId?.userId?.name as string}</strong>
+        },
+        onHeaderCell() {
+          return {
+            className: 'bg-[var(--base-soft)!important]'
+          }
+        },
+        width: 150,
+        fixed: true
+      },
+      {
+        key: 'SCY',
+        title: 'Nhiệm kỳ',
+        dataIndex: 'schoolYearId',
+        render(value) {
+          return value?.name as string
+        },
+        onHeaderCell() {
+          return {
+            className: 'bg-[var(--base-soft)!important]'
+          }
+        },
+        width: 150,
+      },
+      {
+        key: 'stt',
+        title: 'Trạng thái',
+        dataIndex: 'isActive',
+        className: 'text-center',
+        render(value) {
+          return <Tag color={value ? 'green-inverse' : 'red-inverse'}>{value ? 'Đang làm việc' : 'Ngừng'}</Tag>
+        },
+        onHeaderCell() {
+          return {
+            className: 'bg-[var(--base-soft)!important] text-[center!important]'
+          }
+        },
+        width: 150
+      },
+      {
+        key: 'action',
+        title: 'Hành động',
+        onHeaderCell() {
+          return {
+            className: 'bg-[var(--base-soft)!important]'
+          }
+        },
+        render(_, record) {
+          return <Button
+            size="small"
+            onClick={() => {
+              (modalHomeRoomTeacherRef.current as unknown as Obj)?.handleModal?.(true, record);
+            }}
+          >
+            Cập nhật
+          </Button>
         }
-      },
-      width: 80,
-      fixed: true
-    },
-    {
-      title: 'Giáo viên',
-      dataIndex: 'name',
-      render(_, record) {
-        return <strong>{record?.teacherId?.userId?.name as string}</strong>
-      },
-      onHeaderCell() {
-        return {
-          className: 'bg-[var(--base-soft)!important]'
-        }
-      },
-      width: 150,
-      fixed: true
-    },
-    {
-      title: 'Nhiệm kỳ',
-      dataIndex: 'schoolYearId',
-      render(value) {
-        return value?.name as string
-      },
-      onHeaderCell() {
-        return {
-          className: 'bg-[var(--base-soft)!important]'
-        }
-      },
-      width: 150,
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'isActive',
-      className: 'text-center',
-      render(value) {
-        return <Tag color={value ? 'green-inverse' : 'red-inverse'}>{value ? 'Đang làm việc' : 'Ngừng'}</Tag>
-      },
-      onHeaderCell() {
-        return {
-          className: 'bg-[var(--base-soft)!important] text-[center!important]'
-        }
-      },
-    },
-    {
-      title: 'Hành động',
-      onHeaderCell() {
-        return {
-          className: 'bg-[var(--base-soft)!important]'
-        }
-      },
-      render(_, record) {
-        return <Button
-          size="small"
-          onClick={() => {
-            (modalHomeRoomTeacherRef.current as unknown as Obj)?.handleModal?.(true, record);
-          }}
-        >
-          Cập nhật
-        </Button>
       }
-    }
-  ];
-  const handleQueryListHomeRoomTeacher = () => {
+    ]
+  }, []);
+  const handleQueryListHomeRoomTeacher = useCallback(() => {
     listHomeroomTeacher.query({
       "operationName": "HomeRoomTeacher",
       "path": "homeroomTeachers",
@@ -114,7 +126,7 @@ const HomeroomTeacher = (props: Props) => {
       },
       query: queryHomeRoomTeachers
     });
-  };
+  }, []);
   useEffect(() => {
     handleQueryListHomeRoomTeacher();
   }, []);
@@ -142,25 +154,31 @@ const HomeroomTeacher = (props: Props) => {
           <p className='flex items-center gap-[1.2rem]'><PiChalkboardThin /> {currentHomeRoomTeacher ? (getLatestDegree?.major ?? <NotAvailable />) : <NotAvailable />}</p>
         </div>
       </div>
-      <ModalHomeRoomTeacher ref={modalHomeRoomTeacherRef} />
+      <ModalHomeRoomTeacher ref={modalHomeRoomTeacherRef} refreshCallBack={() => handleQueryListHomeRoomTeacher()} />
       <div className="list mt-[1.8rem]">
-        <div className='flex justify-end gap-[1.2rem] mb-[1.2rem]'>
+        <div className='flex items-center justify-end gap-[1.2rem] mb-[1.2rem]'>
+          <Tooltip title="Xem thông tin Đã/Chưa xoá" color='var(--base)'>
+            <Switch
+              className='mr-auto'
+              checked={!viewDataDeleted}
+              checkedChildren="Mặc định" unCheckedChildren="Đã xoá"
+              onChange={() => {
+                setViewDataDeleted(!viewDataDeleted);
+              }}
+            />
+          </Tooltip>
           <Button icon={<ReloadOutlined />} onClick={() => handleQueryListHomeRoomTeacher()}>
             Tải lại
           </Button>
           <Button
             icon={<PlusCircleOutlined />}
             onClick={() => {
-              // (modalHomeRoomTeacherRef.current as unknown as Obj)?.handleModal?.(true);
               (pickTeacher.current as unknown as Obj)?.handleDrawer?.(true);
             }}
           >
             Thêm
           </Button>
         </div>
-        <ModalHomeRoomTeacher
-          ref={modalHomeRoomTeacherRef}
-        />
         <DrawerPickTeacher
           ref={pickTeacher}
         />

@@ -57,3 +57,11 @@ export enum Gender {
     Female = 'Female',
     Other = 'Other'
 }
+
+export enum TypeStudentInClass {
+    Promoted = 'Promoted',
+    Demoted = 'Demoted',
+    Transfered = 'Transfered',
+    Completed = 'Completed',
+    Pending = 'Pending'
+}

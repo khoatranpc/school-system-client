@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, Slice } from "@reduxjs/toolkit";
 import { Obj, ReduxState } from "../types/interface";
 import axiosInstance from "./axios";
-import { createHook, ReturnCreateHook } from ".";
+import { createHook, ResponseCallback, ReturnCreateHook } from ".";
 import { RootState } from "../store/store";
 
 
@@ -51,18 +51,23 @@ const createRedux = (name: string, asyncThunk: TypeQueryGraphQL): {
                 state.errors = undefined;
             });
             builder.addCase(asyncThunk.fulfilled, (state, action) => {
+                const getVariables = ((action.meta.arg as unknown as Obj)?.variables as Obj);
                 state.isLoading = false;
-                state.componentId = ((action.meta.arg as unknown as Obj)?.variables as Obj)?.componentId as string;
+                state.componentId = getVariables?.componentId as string;
                 state.data = (action.payload as Obj)?.data;
                 state.errors = undefined;
                 state.successful = true;
+                (getVariables?.callback as ResponseCallback)?.(true, '');
+
             });
             builder.addCase(asyncThunk.rejected, (state, action) => {
+                const getVariables = ((action.meta.arg as unknown as Obj)?.variables as Obj);
                 state.data = undefined;
                 state.isLoading = false;
                 state.successful = false;
                 const getMessageError = (JSON.parse(action.error?.message as string) as Obj[])?.map((item) => item.message as string)?.join('\n');
                 state.errors = getMessageError;
+                (getVariables?.callback as ResponseCallback)?.(false, getMessageError);
             });
         },
     });

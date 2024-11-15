@@ -20,6 +20,7 @@ const queryHomeRoomTeachers = `#graphql
      query HomeRoomTeacher($payload: FindHomeRoomTeacher!) {
         homeroomTeachers(payload: $payload) {
             data {
+                _id
                 teacherId {
                     _id
                     degrees {

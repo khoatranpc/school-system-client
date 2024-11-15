@@ -53,16 +53,11 @@ const queryStudentsRNotInClass = `#graphql
 `;
 
 const mutationAddStudentsIntoClass = `#graphql
-    query StudentClasses($payload: StudentClassesFilterInput){
-        studentClasses(payload: $payload){
-        data{
-            _id
-        }
-        page
-        limit
-        count
-        }
+  mutation AddStudentsIntoClass($payload: AddStudentsToClassInput!) {
+    addStudentsIntoClass(payload: $payload) {
+        studentIds
     }
+}
 `;
 export {
     queryStudentClasses,
