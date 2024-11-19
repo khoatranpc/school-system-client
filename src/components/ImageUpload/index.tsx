@@ -4,7 +4,7 @@ import { UploadChangeParam } from "antd/es/upload";
 import ImgCrop from "antd-img-crop";
 import UploadUI from "../UploadUI";
 
-const ImageUpload = memo(({ fileList, setFileList }: { fileList: UploadFile<any>[], setFileList: Dispatch<SetStateAction<any>>, }) => {
+const ImageUpload = memo(({ fileList, setFileList, className }: { fileList: UploadFile<any>[], setFileList: Dispatch<SetStateAction<any>>, className?: string }) => {
     const getDefaultImgSrc = useMemo(() => {
         const getRandom = Math.round(Math.random() * 10);
         const getImgSrc = getRandom % 2 == 0 ? '/teachermale.avif' : '/teacherfemale.avif';
@@ -23,7 +23,7 @@ const ImageUpload = memo(({ fileList, setFileList }: { fileList: UploadFile<any>
         setFileList(info.fileList);
     }, []);
     return (
-        <>
+        <div className={className}>
             <Image
                 alt="avatar"
                 src={imgSrc}
@@ -40,7 +40,7 @@ const ImageUpload = memo(({ fileList, setFileList }: { fileList: UploadFile<any>
                     <UploadUI text={<p className='text-[1.4rem] font-semibold'>Chọn ảnh</p>} />
                 </Upload>
             </ImgCrop>
-        </>
+        </div>
     );
 });
 export default ImageUpload;

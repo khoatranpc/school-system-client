@@ -52,6 +52,7 @@ const queryListStudent = `#graphql
     query Students($payload: StudentsInput) {
         students(payload: $payload){
             data{
+                _id
                 code
                 isActive
                 isDeleted

@@ -1,8 +1,10 @@
-import React from 'react'
+'use client';
+import React from 'react';
+import StudentDetail from '@/src/screens/Student/Detail';
 
 const DetailStudent = () => {
     return (
-        <div>DetailStudent</div>
+        <StudentDetail />
     )
 }
 

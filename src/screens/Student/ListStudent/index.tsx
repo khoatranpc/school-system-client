@@ -6,6 +6,7 @@ import { ColumnsType } from 'antd/es/table';
 import { Table } from 'antd/lib';
 import { IoAddCircle } from 'react-icons/io5';
 import { EyeOutlined, LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
 import { Button, Drawer, Tag, Tooltip } from 'antd';
 import HighchartsReact from 'highcharts-react-official';
 import { Obj, Role } from '@/src/types/interface';
@@ -18,6 +19,7 @@ import './styles.scss';
 const ListStudent = () => {
     const ltStudent = listStudent.hook();
     const componentId = useRef<string>('ListStudent');
+    const router = useRouter();
     const [drawer, setDrawer] = useState(false);
     const getDataListStudent = useMemo(() => {
         return ltStudent.data.data?.students?.data as Obj[] ?? [];
@@ -93,9 +95,12 @@ const ListStudent = () => {
             onHeaderCell() {
                 return configHeaderCell();
             },
-            render() {
+            render(_, record) {
                 return <div>
-                    <Button icon={<EyeOutlined />}>Chi tiết</Button>
+                    <Button icon={<EyeOutlined />} onClick={() => {
+                        router.push(`students/detail?studentId=${record._id}`);
+                        console.log(record);
+                    }}>Chi tiết</Button>
                 </div>
             }
         }
