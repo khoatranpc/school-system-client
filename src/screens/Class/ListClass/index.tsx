@@ -40,10 +40,13 @@ const ListClass = (props: Props) => {
         (listHomeroomTeacher.data.data?.homeroomTeachers?.data as Obj[])?.filter((item) => {
             return item.isActive && !item.isDeleted
         })?.forEach((item) => {
-            data[item.classId?._id as string] ?
+            if (data[item.classId?._id as string]) {
+
                 data[item.classId?._id as string].push(item)
-                :
+            } else {
                 data[item.classId?._id as string] = [item];
+
+            }
         });
         return data;
     }, [listHomeroomTeacher.data.data]);
