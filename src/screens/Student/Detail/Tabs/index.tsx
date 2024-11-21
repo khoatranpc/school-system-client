@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Tabs as TabsComponent } from 'antd';
 import type { TabsProps } from 'antd';
 import StudentInfo from './StudentInfo';
+import Classes from './Classes';
+import ScoreTable from './ScoreTable';
 
 export enum TabStudentInfo {
     Classes = 'Classes',
@@ -22,17 +24,17 @@ const getItemsTab: TabsProps['items'] = Object.keys(getLabelTabStudentInfo).map(
     }
 })
 
-const getTab: Record<TabStudentInfo, React.ReactNode> = {
-    Classes: <></>,
-    PersonalInformation: <StudentInfo />,
-    TableScore: <></>
-};
 
 interface Props {
     className?: string;
 }
 const Tabs = (props: Props) => {
-    const [tab, setTab] = useState<TabStudentInfo>(TabStudentInfo.PersonalInformation);
+    const [tab, setTab] = useState<TabStudentInfo>(TabStudentInfo.Classes);
+    const getTab: Record<TabStudentInfo, React.ReactNode> = {
+        Classes: <Classes />,
+        PersonalInformation: <StudentInfo />,
+        TableScore: <ScoreTable />
+    };
     return (
         <div className={`tabStudentInfo ${props.className}`}>
             <TabsComponent

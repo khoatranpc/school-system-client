@@ -98,7 +98,11 @@ const StudentInfo = () => {
                 <Row gutter={[12, 12]}>
                     <Col span={8}>
                         <Form.Item
-                            label="Bố"
+                            label="Phụ huynh 1"
+                        >
+                            <Input placeholder='Chức danh' />
+                        </Form.Item>
+                        <Form.Item
                         >
                             <Input placeholder='Họ tên' />
                         </Form.Item>
@@ -113,7 +117,11 @@ const StudentInfo = () => {
                     </Col>
                     <Col span={8}>
                         <Form.Item
-                            label="Mẹ"
+                            label="Phụ huynh 2"
+                        >
+                            <Input placeholder='Chức danh' />
+                        </Form.Item>
+                        <Form.Item
                         >
                             <Input placeholder='Họ tên' />
                         </Form.Item>
